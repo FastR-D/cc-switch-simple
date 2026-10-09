@@ -1,0 +1,5 @@
+name=xingshu
+base_url=https://submodelhub.ilaien.com/v1
+type=openai
+api_key=sk-your-api-key-here
+model_name=gpt-4
