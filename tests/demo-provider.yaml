@@ -1,0 +1,7 @@
+# Only works while the local acceptance demo API is running.
+name: local-acceptance-demo
+base_url: http://127.0.0.1:17861/v1
+type: openai
+api_key: local-test-only
+model_name: local-mock
+api_format: openai
