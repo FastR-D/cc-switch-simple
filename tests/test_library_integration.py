@@ -3,6 +3,7 @@ import json
 import os
 import subprocess
 import sys
+import sysconfig
 import tempfile
 import threading
 import unittest
@@ -68,7 +69,7 @@ class LibraryIntegrationTests(unittest.TestCase):
 
     def command(self, *arguments):
         # Run the installed console script away from the repository.
-        binary = Path(sys.executable).with_name("cc-simple.exe" if sys.platform == "win32" else "cc-simple")
+        binary = Path(sysconfig.get_path("scripts")) / ("cc-simple.exe" if sys.platform == "win32" else "cc-simple")
         environment = {**os.environ, "PYTHONUTF8": "1", "PYTHONIOENCODING": "utf-8"}
         result = subprocess.run([str(binary), "--json", "--config-dir", str(self.root / "store"), "check", str(self.source), "--timeout", "5", "--attempts", "3", *arguments], cwd=self.root, env=environment, capture_output=True, encoding="utf-8", timeout=30)
         self.assertNotIn("Traceback", result.stderr)
