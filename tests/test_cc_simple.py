@@ -17,6 +17,28 @@ import cc_simple as cli
 
 
 class SwitcherTests(unittest.TestCase):
+    def test_cli_respects_client_configuration_directories(self):
+        script = Path(cli.__file__).with_name("cc-simple.py")
+        for target, variable, filename in (("codex", "CODEX_HOME", "config.toml"),
+                                           ("claude", "CLAUDE_CONFIG_DIR", "settings.json")):
+            configured = self.root / (target + "-configured")
+            explicit = self.root / (target + "-explicit")
+            source = self.write_source(dict(self.config, type="openai" if target == "codex" else "anthropic"))
+            environment = {**os.environ, "PYTHONUTF8": "1", "PYTHONIOENCODING": "utf-8", variable: str(configured)}
+            command = [sys.executable, str(script), "--json", "use", str(source), "--target", target]
+            with self.subTest(target=target):
+                preview = subprocess.run([*command, "--dry-run"], env=environment, capture_output=True, encoding="utf-8", check=True)
+                self.assertEqual(Path(json.loads(preview.stdout)["path"]), configured / filename)
+                self.assertFalse(configured.exists())
+                result = subprocess.run(command, env=environment, capture_output=True, encoding="utf-8", check=True)
+                self.assertEqual(Path(json.loads(result.stdout)["path"]), configured / filename)
+                self.assertTrue((configured / filename).is_file())
+                override = subprocess.run([*command, "--target-dir", str(explicit)], env=environment, capture_output=True, encoding="utf-8", check=True)
+                self.assertEqual(Path(json.loads(override.stdout)["path"]), explicit / filename)
+                environment[variable] = ""
+                fallback = subprocess.run([*command, "--dry-run"], env=environment, capture_output=True, encoding="utf-8", check=True)
+                self.assertEqual(Path(json.loads(fallback.stdout)["path"]), Path.home() / (".codex" if target == "codex" else ".claude") / filename)
+
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory()
         self.addCleanup(self.temporary.cleanup)

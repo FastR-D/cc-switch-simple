@@ -80,6 +80,8 @@ cc-simple check provider.yaml --json
 | `openai` | `~/.codex/config.toml` |
 | `anthropic` | `~/.claude/settings.json` |
 
+若设置 `CODEX_HOME` 或 `CLAUDE_CONFIG_DIR`，则分别使用该目录中的 `config.toml` 或 `settings.json`；空环境变量使用上述默认目录。显式 `--target-dir` 优先于环境变量。`--dry-run` 使用相同目录解析规则。
+
 切换保留 TOML 注释、其他 provider、项目配置、Claude permissions 等无关设置。Codex 的 `cc_simple` provider 会清除旧认证、headers 和 query 参数，保留 timeout、retry 等无关字段。Claude 会清除旧 `ANTHROPIC_AUTH_TOKEN` 和 `ANTHROPIC_MODEL`，写入新接口、密钥及模型。
 
 已有文件在切换前保存为唯一备份，例如 `config.toml.bak.20261009T120000-a1b2c3d4`；新文件写完并刷新后原子替换。现有 TOML/JSON 无效时停止写入。恢复时先退出客户端，再用所需备份替换目标文件。

@@ -191,7 +191,9 @@ def summary(config):
 def switch(config, target_dir=None, target=None, dry_run=False):
     target = resolve_target(config, target)
     config = dict(config, base_url=client_base_url(config["base_url"], target))
-    directory = Path(target_dir).expanduser() if target_dir else Path.home() / (".codex" if target == "codex" else ".claude")
+    variable, default = ("CODEX_HOME", ".codex") if target == "codex" else ("CLAUDE_CONFIG_DIR", ".claude")
+    location = target_dir or os.environ.get(variable)
+    directory = Path(location).expanduser() if location else Path.home() / default
     path = directory / ("config.toml" if target == "codex" else "settings.json")
     if path.is_symlink():
         raise ConfigError("refusing to replace a symbolic-link configuration file")
