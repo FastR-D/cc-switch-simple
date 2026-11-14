@@ -1,1 +1,8 @@
-my_conf.yaml  
+my_conf.yaml
+.venv/
+__pycache__/
+*.egg-info/
+build/
+dist/
+confs/
+output/

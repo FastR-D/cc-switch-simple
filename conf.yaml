@@ -1,4 +1,5 @@
-name=sbbbbbb
-base_url=https://fast.sbbbbbbbbb.xyz/v1
-type=openai
-model=sk-xxxx
+name: responses-example
+base_url: https://your-responses-proxy.example/v1
+type: openai
+env_key: MODEL_API_TOKEN
+model_name: your-real-model-id

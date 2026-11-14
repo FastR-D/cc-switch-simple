@@ -1,5 +1,5 @@
-name=xingshu
-base_url=https://submodelhub.ilaien.com/v1
-type=openai
-api_key=sk-your-api-key-here
-model_name=gpt-4
+name: responses-proxy
+base_url: https://your-responses-proxy.example/v1
+type: openai
+env_key: MODEL_API_TOKEN
+model_name: your-real-model-id

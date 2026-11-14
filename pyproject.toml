@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cc-switch-simple"
+version = "0.2.1"
+description = "Minimal YAML configuration switcher with ModelTrace fingerprint checks"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = ["PyYAML>=6,<7", "tomlkit>=0.13,<1"]
+
+[project.scripts]
+cc-simple = "cc_simple:main"
+
+[tool.setuptools]
+py-modules = ["cc_simple"]
